@@ -1,3 +1,12 @@
+import sys, types
+
+# 🩵 FIX for Python 3.13 imghdr removal
+if "imghdr" not in sys.modules:
+    imghdr_stub = types.ModuleType("imghdr")
+    def what(file=None, h=None):
+        return None
+    imghdr_stub.what = what
+    sys.modules["imghdr"] = imghdr_stub
 import os
 import re
 from flask import Flask
@@ -25,7 +34,7 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 if not TELEGRAM_BOT_TOKEN:
     raise ValueError("TELEGRAM_BOT_TOKEN environment variable is required")
 if not GEMINI_API_KEY:
-    raise ValueError("GEMINI_API_KEY environment variable is required")
+    raise ValueError("")
 
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel("models/gemini-2.5-flash")
